@@ -1,0 +1,14 @@
+Grades for version committed on time
+	add dot: 20.0 / 20
+			*Passed test: Standard
+			*Passed test: Standard (evil)
+			*Passed test: Largest
+			*Passed test: Largest (evil)
+			*Passed test: Full Column
+			*Passed test: Full Column (evil)
+			*Passed test: Checkers
+			*Passed test: Checkers (evil)
+		
+Total: 20.0 / 20
+
+Final Score: 20.0 / 20

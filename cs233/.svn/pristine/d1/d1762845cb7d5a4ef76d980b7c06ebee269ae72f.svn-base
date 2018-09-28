@@ -1,0 +1,13 @@
+.text
+
+## unsigned int get_origin(unsigned int pos, unsigned int* origins) {
+##     while (pos != origins[pos]) {
+##         pos = origins[pos];
+##     }
+##     return pos;
+## }
+
+.globl get_origin
+get_origin:
+	# Your code goes here :)
+	jr	$ra

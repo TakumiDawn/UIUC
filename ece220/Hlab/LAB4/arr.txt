@@ -1,0 +1,72 @@
+gcc -g -o honors4 main.c honors4.c
+gdb --args honors4 men4.txt women4.txt 4
+
+{
+  int mFree[size];// = { 0,0,0,0 }; //two arrays indicating the marriage status of men and women
+  int wFree[size];// = { 0,0,0,0 };
+
+  int wPartner[size];//= { -1 }; //array stores the partners of women
+  //solution[size] = { -1 };
+//  memset(wPartner, -1, sizeof(wPartner));
+//  memset(mFree, 0, sizeof(mFree));
+//  memset(solution, -1, sizeof(solution));
+  int x;
+  for (x = 0; x < size; x++)
+  {
+    mFree[x] = 0;
+    wFree[x] = 0;
+    wPartner[x] = -1;
+    solution[x] = -1;
+  }
+
+
+  int freemCount = size; //initiate the countor for the number of free men
+  while (freemCount > 0) // While there are free men
+  {
+    int m; //start from the first free men
+    for (m = 0; m < size; m++)
+    {
+      if (mFree[m]==0)
+        break;
+    }
+
+    int i;
+    for (i = 0; i < size && mFree[m] == 0; i++) //go thru all women by the "m"th man's preferences
+    {
+      int w = men[m][i]; /*first woman on m’s list to whom m has not yet proposed*/
+      if (wPartner[w]==-1)
+      {
+        wPartner[w] = m;
+        solution [m] = w;
+        mFree[m] = 1;
+        freemCount--;
+      }
+      else
+      {
+        int m1 = wPartner[w]; //m1 is the current engagement of women "w"
+        int j, flag; // the following checks if m is a better choice than m1, flag == 1 means m is better, 0 means m1 is better
+        for (j=0; j<size; j++)
+        {
+          if (women[w][j]==m1)
+          {
+            flag = 0;
+            break;
+          }
+          if (women[w][j]==m)
+          {
+            flag = 1;
+            break;
+          }
+        }
+        if (flag = 1)
+        {
+           wPartner[w] = m;
+           solution [m] = w;
+           mFree[m] = 1;
+           mFree[m1] = 0;
+        }
+      }
+    }
+  }
+
+}

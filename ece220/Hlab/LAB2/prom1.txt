@@ -1,0 +1,2 @@
+Print hex algorithm method only works for base N, where N is a number of 2's power, such as 4, 8, or 16,
+because shifting the bit left is multiply a number by 2.  

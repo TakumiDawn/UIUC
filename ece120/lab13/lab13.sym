@@ -1,0 +1,16 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	NEXT_ROW          3010
+//	NEXT_COLUMN       3014
+//	ZR                301F
+//	DONE_ROW          3023
+//	DONE              3028
+//	ZERO              3029
+//	ONE               302A
+//	CHAR              302B
+//	NL                302C
+//	ONEorZERO         302D
+//	FONT_DATA         3035
+

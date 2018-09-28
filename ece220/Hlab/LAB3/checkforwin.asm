@@ -1,0 +1,274 @@
+; Introductory Paragraph:
+; The checkforwin.asm checks the winning status of the game connect4.
+; R1: counter of rows
+; R3: pointer of board
+; R4: hold the value of CFW_RESULT
+; R5: temp reg
+; R6: hold the address of a vlaue
+
+
+  .ORIG x3A00
+; CHECKFORWIN
+;   Inputs:
+;     R0: Current player's token
+;     R1: Column of last move
+;     R2: Memory location modified in last move
+;   Outputs:
+;     R0: 1 if the player wins
+;         0 if no win
+CHECKFORWIN
+  ST R4,CFW_SAVER4
+	ST R7,CFW_SAVER7
+	ADD R0,R0,#0
+	BRn PRINT2
+	BRnzp PRINT1
+
+BACK
+	ST R1,CFW_SAVER1
+	ST R3,CFW_SAVER3
+	ST R5,CFW_SAVER5
+  ST R6,CFW_SAVER6
+
+	ADD R3,R2,#0
+	ADD R3,R3,#7
+	LDR R6,R3,#0
+	NOT R4,R6
+	ADD R4,R4,#1
+	ADD R4,R4,R0
+	BRz CHECKA
+
+CK
+	LD R1,CFW_SAVER1
+	AND R5,R5,#0
+	ADD R3,R2,#0
+	AND R4,R4,#0
+	ADD R4,R4,#7
+	NOT R1,R1
+	ADD R1,R1,#1
+	ADD R1,R1,R7
+
+LOOP1
+	ADD R1,R1,#0
+	BRz FH1
+	ADD R1,R1,#-1
+	LDR R6,R3,#0
+	ADD R3,R3,#1
+	NOT R4,R6
+	ADD R4,R4,#1
+	ADD R4,R4,R0
+	BRnp FH1
+	ADD R5,R5,#1
+	BR LOOP1
+
+FH1
+	ADD R5,R5,#-4
+	BRzp YES
+	LD R1,CFW_SAVER1
+	AND R5,R5,#0
+	ADD R3,R2,#0
+
+LOOP2
+	ADD R1,R1,#0
+	BRz FH2
+	ADD R1,R1,#-1
+	LDR R6,R3,#0
+	ADD R3,R3,#-1
+	NOT R4,R6
+	ADD R4,R4,#1
+	ADD R4,R4,R0
+	BRnp FH2
+	ADD R5,R5,#1
+	BR LOOP2
+
+FH2
+	ADD R5,R5,#-4
+	BRzp YES
+	AND R5,R5,#0
+	LD R1,CFW_SAVER1
+	ADD R3,R2,#0
+
+LOOP1_LB
+	ADD R1,R1,#0
+	BRz F_LC
+	ADD R1,R1,#-1
+	ADD R3,R3,#-1
+	ADD R3,R3,#7
+	LDR R6,R3,#0
+	NOT R4,R6
+	ADD R4,R4,#1
+	ADD R4,R4,R0
+	BRnp F_LC
+	ADD R5,R5,#1
+	BR LOOP1_LB
+
+F_LC
+	ST R5,CFW_RESULT
+	AND R5,R5,#0
+	LD R1,CFW_SAVER1
+	ADD R3,R2,#0
+	AND R4,R4,#0
+	ADD R4,R4,#7
+	NOT R1,R1
+	ADD R1,R1,#1
+	ADD R1,R1,R4
+
+LOOP1_UR
+	ADD R1,R1,#0
+	BRz F_UC
+	ADD R1,R1,#-1
+	ADD R3,R3,#1
+	ADD R3,R3,#-7
+	LDR R6,R3,#0
+	NOT R4,R6
+	ADD R4,R4,#1
+	ADD R4,R4,R0
+	BRnp F_UC
+	ADD R5,R5,#1
+	BR LOOP1_UR
+
+F_UC
+	LD R4,CFW_RESULT
+	ADD R5,R5,R4
+	ADD R5,R5,#-3
+	BRzp YES
+	AND R5,R5,#0
+	LD R1,CFW_SAVER1
+	ADD R3,R2,#0
+
+LOOP1_UL
+	ADD R1,R1,#0
+	BRz F_ULC
+	ADD R1,R1,#-1
+	ADD R3,R3,#-1
+	ADD R3,R3,#-7
+	LDR R6,R3,#0
+	NOT R4,R6
+	ADD R4,R4,#1
+	ADD R4,R4,R0
+	BRnp F_ULC
+	ADD R5,R5,#1
+	BR LOOP1_UL
+
+F_ULC
+	ST R5,CFW_RESULT
+	AND R5,R5,#0
+	LD R1,CFW_SAVER1
+	ADD R3,R2,#0
+	AND R4,R4,#0
+	ADD R4,R4,#7
+	NOT R1,R1
+	ADD R1,R1,#1
+	ADD R1,R1,R4
+
+LOOP1_LR
+	ADD R1,R1,#0
+	BRz F_LRC
+	ADD R1,R1,#-1
+	ADD R3,R3,#1
+	ADD R3,R3,#7
+	LDR R6,R3,#0
+	NOT R4,R6
+	ADD R4,R4,#1
+	ADD R4,R4,R0
+	BRnp F_LRC
+	ADD R5,R5,#1
+	BR LOOP1_LR
+
+F_LRC
+	LD R4,CFW_RESULT
+	ADD R5,R5,R4
+	ADD R5,R5,#-3
+	BRzp YES
+	BR NO
+
+CHECKA
+	ADD R3,R3,#7
+	LDR R6,R3,#0
+	NOT R4,R6
+	ADD R4,R4,#1
+	ADD R4,R4,R0
+	BRz CHECKB
+	BR CK
+
+CHECKB
+	ADD R3,R3,#7
+	LDR R6,R3,#0
+	NOT R4,R6
+	ADD R4,R4,#1
+	ADD R4,R4,R0
+	BRz YES
+	BR CK
+
+NO
+	AND R0,R0,#0
+	LD R3,CFW_SAVER3
+	LD R6,CFW_SAVER6
+	LD R4,CFW_SAVER4
+	LD R5,CFW_SAVER5
+	LD R1,CFW_SAVER1
+	LD R7,CFW_SAVER7
+	RET
+
+YES
+	AND R0,R0,#0
+	ADD R0,R0,#1
+	LD R3,CFW_SAVER3
+	LD R6,CFW_SAVER6
+	LD R4,CFW_SAVER4
+	LD R5,CFW_SAVER5
+	LD R1,CFW_SAVER1
+	LD R7,CFW_SAVER7
+	RET
+
+PRINT1
+	ST R0,CFW_SAVER0
+	LEA R0,P1
+	PUTS
+	LD R4,ASCII_Z
+	ADD R0,R1,R4
+	ADD R0,R0,#1
+	OUT
+	LEA R0,NL
+	PUTS
+	LD R0,CFW_SAVER0
+	BR BACK
+
+PRINT2
+	ST R0,CFW_SAVER0
+	LEA R0,P2
+	PUTS
+	LD R4,ASCII_Z
+	ADD R0,R1,R4
+	ADD R0,R0,#1
+	OUT
+	LEA R0,NL
+	PUTS
+	LD R0,CFW_SAVER0
+	BR BACK
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+CFW_SAVER0 .BLKW #1
+CFW_SAVER1	.BLKW #1
+CFW_SAVER3	.BLKW #1
+CFW_SAVER6	.BLKW #1
+CFW_SAVER4	.BLKW #1
+CFW_SAVER5 .BLKW #1
+CFW_SAVER7	.BLKW #1
+CFW_RESULT .BLKW #1
+ASCII_Z  .FILL x30
+P2 .STRINGZ   "Player 2's turn:"
+P1 .STRINGZ   "Player 1's turn:"
+NL .STRINGZ   "\n"
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Do not modify below this line ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Indirect references to far away locations
+CW_BOARD
+    .FILL x6000
+
+; End of assembly file
+    .END

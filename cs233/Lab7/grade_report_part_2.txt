@@ -1,0 +1,80 @@
+Grades for version committed on time
+	get origin: 20.0 / 20
+			*Passed test: default
+			*Passed test: default (evil)
+			*Passed test: given
+			*Passed test: given (evil)
+			*Passed test: double
+			*Passed test: double (evil)
+			*Passed test: cascade
+			*Passed test: cascade (evil)
+		
+	is connected: 10.0 / 20
+			*Passed test: same
+			*Failed test: same (evil)
+				*Error running test: 
+					Exception occurred at PC=0x0040064c
+					  Unaligned address in inst/data fetch: 0xdeadc3fe
+			*Passed test: one apart
+			*Failed test: one apart (evil)
+				*Error running test: 
+					Exception occurred at PC=0x0040064c
+					  Unaligned address in inst/data fetch: 0xdeadc10a
+			*Passed test: off_by_one
+			*Failed test: off_by_one (evil)
+				*Error running test: 
+					Exception occurred at PC=0x0040064c
+					  Unaligned address in inst/data fetch: 0xdeadc26e
+			*Passed test: harder
+			*Failed test: harder (evil)
+				*Error running test: 
+					Exception occurred at PC=0x0040064c
+					  Unaligned address in inst/data fetch: 0xdeadc5da
+			*Passed test: cascade
+			*Failed test: cascade (evil)
+				*Error running test: 
+					Exception occurred at PC=0x0040064c
+					  Unaligned address in inst/data fetch: 0xdeadc1d6
+		
+	add line: 22.5 / 40
+			*Passed test: given_1
+			*Failed test: given_1 (evil)
+				*Error running test: 
+					Exception occurred at PC=0x00400788
+					  Unaligned address in inst/data fetch: 0xdeadc0de
+			*Passed test: given_2
+			*Failed test: given_2 (evil)
+				*Error running test: 
+					Exception occurred at PC=0x00400788
+					  Unaligned address in inst/data fetch: 0xdeadc0de
+			*Passed test: base
+			*Passed test: base (evil)
+			*Passed test: vertical
+			*Failed test: vertical (evil)
+				*Error running test: 
+					Exception occurred at PC=0x00400788
+					  Unaligned address in inst/data fetch: 0xdeadc0f2
+			*Passed test: reverse
+			*Failed test: reverse (evil)
+				*Error running test: 
+					Exception occurred at PC=0x00400788
+					  Unaligned address in inst/data fetch: 0xdeadc0de
+			*Passed test: combined
+			*Failed test: combined (evil)
+				*Error running test: 
+					Exception occurred at PC=0x00400788
+					  Unaligned address in inst/data fetch: 0xdeadc0e2
+			*Passed test: full
+			*Failed test: full (evil)
+				*Error running test: 
+					Exception occurred at PC=0x00400788
+					  Unaligned address in inst/data fetch: 0xdeadc0de
+			*Passed test: cascade
+			*Failed test: cascade (evil)
+				*Error running test: 
+					Exception occurred at PC=0x00400788
+					  Unaligned address in inst/data fetch: 0xdeadc102
+		
+Total: 52.5 / 80
+
+Final Score: 52.5 / 80

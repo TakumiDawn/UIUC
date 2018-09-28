@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main()
+{
+  float n;
+
+  printf("Enter a row index: ");
+  scanf("%f", &n);
+
+  float i;
+  unsigned long x;
+  int k=0;
+  for (k=0; k<=n; k++){
+    if (k==0)
+    {
+      x = 1;
+    }
+    else{
+      for (i=1; i<=k; i++)
+        {
+          if (i==1)
+          {
+            x = (n+1-i)/i;
+          }
+          else
+            {
+              x = (x * (n+1-i))/i;
+            }
+        }
+      }
+      if (k==n)
+      {printf("%lu\n", x);}
+      else
+      {printf("%lu ", x);}
+  }
+  return 0;
+}

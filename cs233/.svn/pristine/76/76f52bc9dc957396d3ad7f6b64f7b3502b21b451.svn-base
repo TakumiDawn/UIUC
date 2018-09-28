@@ -1,0 +1,27 @@
+// Virtues of a programmer (from Programming Perl, Wall, Schwartz and
+// Christiansen)
+//
+// Laziness - The quality that makes you go to great effort to reduce
+// overall energy expenditure. It makes you write labor-saving programs
+// that other people will find useful, and document what you wrote so you
+// don't have to answer so many questions about it.
+
+
+// This function generates part of a circuit (albeit a slow one)
+// to compute whether a bus is all zeros.
+
+// make example_generator
+// ./example_generator
+
+#include <cstdio>
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  cout << "alu1 a" << 0  << "(out[" << 0 << "], carryout[" << 0 << "], A[" << 0 << "], B[" << 0 << "], control[" << 0 << "], control[" << "2:0" << "]);" << endl;
+  for (int i = 1; i < 32; i++)
+  {
+    cout << "alu1 a" << i  << "(out[" << i << "], carryout[" << i << "], A[" << i << "], B[" << i << "], carryout[" << i-1 << "], control[" <<  "2:0" << "]);" << endl;
+  }
+}

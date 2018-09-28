@@ -1,0 +1,8 @@
+
+module palindrome_control(palindrome, done, select, load, go, a_ne_b, front_ge_back, clock, reset);
+	output palindrome, done, select, load;
+	input go, a_ne_b, front_ge_back;
+	input clock, reset;
+
+	
+endmodule // palindrome_control 

@@ -1,0 +1,25 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	GO                3001
+//	START_GETC        3001
+//	START_OUT         3009
+//	CHECK             300F
+//	MOREBIT           3014
+//	INVALID           3026
+//	VALID             3029
+//	DONE              302C
+//	KBSR              302D
+//	KBDR              302E
+//	DSR               302F
+//	DDR               3030
+//	INV_MSG           3031
+//	VAL_MSG           3047
+//	ENTER             305B
+//	EQ                305C
+//	NUM0              305D
+//	NUM9              305E
+//	SADD              305F
+//	SADD_MAX          3060
+

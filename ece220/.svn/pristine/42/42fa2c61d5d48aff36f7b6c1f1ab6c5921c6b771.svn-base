@@ -1,0 +1,8 @@
+In badtrap.asm,
+I used the first method Modify the subroutine itself -- changing the line of
+"PUTS" at x0459 from x1220 to x1222.
+Thus, it will print two fewer bits to the screen.(e.g., from "123456" to "3456")
+
+In badtrap_2.asm,
+I changed the value of PUTS in the trap table to OUT x0450, so PUTS is actually
+doing "OUT" the value in R0.

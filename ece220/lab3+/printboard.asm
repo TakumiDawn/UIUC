@@ -1,0 +1,99 @@
+; printboard.asm
+;
+; Intoductory Paragraph:
+; This function is used to print the gameboard
+; R1 - row counter
+; R2 - col counter
+; R3 - BOARD pointer
+
+    .ORIG x3600
+; PRINTBOARD
+PRINTBOARD
+    ; Your code goes here:
+	ST R0, PB_SAVE_R0
+	ST R1, PB_SAVE_R1
+	ST R2, PB_SAVE_R2
+	ST R3, PB_SAVE_R3
+	ST R7, PB_SAVE_R7
+
+	AND R1,R1,#0
+	ADD R1,R1,#6
+	AND R2,R2,#0
+	ADD R2,R2,#7
+	LD  R3,PB_BOARD
+
+KEEP_PRINT_ROW
+	ADD R1,R1,#0
+	BRz BR_PRINT_ROW_FINISH
+	ADD R1,R1,#-1
+
+KEEP_PRINT_COL
+	ADD R2,R2,#0
+	BRz BR_PRINT_COL_FINISH
+	ADD R2,R2,#-1
+
+	LDR R0,R3,#0
+	BRp GO_PRINT_X
+	ADD R0,R0,#0
+	BRn GO_PRINT_O
+	LDI R0,PB_EMPTY_PIECE
+	OUT
+	BR CONTINUE_COL
+GO_PRINT_X
+	LDI R0,PB_P1_PIECE	
+	OUT
+	BR CONTINUE_COL
+GO_PRINT_O
+	LDI R0,PB_P2_PIECE
+	OUT
+
+CONTINUE_COL
+
+	ADD R3,R3,#1
+	BR KEEP_PRINT_COL
+
+BR_PRINT_COL_FINISH
+	LDI R0,PB_NEWLINE
+	OUT
+	AND R2,R2,#0
+	ADD R2,R2,#7
+	BR  KEEP_PRINT_ROW
+
+
+BR_PRINT_ROW_FINISH
+LEA R0,PB_PRINT_SPACE
+PUTS
+LD R0,PB_SAVE_R0
+LD R1,PB_SAVE_R1
+LD R2,PB_SAVE_R2
+LD R3,PB_SAVE_R3
+LD R7,PB_SAVE_R7
+RET
+   
+PB_SAVE_R0 .FILL x0000;
+PB_SAVE_R1 .FILL x0000;
+PB_SAVE_R2 .FILL x0000;
+PB_SAVE_R3 .FILL x0000;
+PB_SAVE_R7 .FILL x0000;
+PB_PRINT_SPACE .STRINGZ "\n"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Do not modify below this line ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Indirect references to far away locations
+PB_BOARD
+    .FILL x6000
+PB_ASCII_ZERO
+    .FILL x602A
+PB_NEWLINE
+    .FILL x602B
+PB_EMPTY_PIECE
+    .FILL x602C
+PB_P1_PIECE
+    .FILL x602D
+PB_P2_PIECE
+    .FILL x602E
+
+; End of assembly file
+    .END

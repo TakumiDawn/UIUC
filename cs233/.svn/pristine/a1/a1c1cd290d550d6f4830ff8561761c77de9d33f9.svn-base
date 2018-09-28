@@ -1,0 +1,35 @@
+/**
+ * @file
+ * Contains the implementation of the countOnes function.
+ */
+
+unsigned countOnes(unsigned input)
+{
+  unsigned right1 = input & 0x55555555;
+  unsigned left1 = input & 0xAAAAAAAA;
+	left1 = left1 >> 1;
+  unsigned sixteen = left1 + right1;
+	unsigned right2 = sixteen & 0x33333333;
+  unsigned left2 = sixteen & 0xCCCCCCCC;
+	left2 = left2 >>2;
+
+	unsigned eight = left2 + right2;
+	unsigned right3 = eight & 0x0F0F0F0F;
+  unsigned left3  = eight & 0xF0F0F0F0;
+	left3 = left3 >>4;
+
+
+	unsigned four = left3 + right3;
+	unsigned right4 = four & 0x00FF00FF;
+  unsigned left4  = four & 0xFF00FF00;
+	left4 = left4 >>8;
+
+	unsigned two = left4 + right4;
+	unsigned right5 = two & 0x0000FFFF;
+  unsigned left5  = two & 0xFFFF0000;
+	left5 = left5 >>16;
+
+  input = right5 + left5;
+
+	return input;
+}

@@ -1,0 +1,13 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	MORELINES         3004
+//	MOREBIT           3005
+//	NL                300A
+//	DONE              300E
+//	NEWLINE           300F
+//	IMAGEADDR         3010
+//	IMAGEADDR_M       3011
+//	IMAGEADDR_C       3012
+

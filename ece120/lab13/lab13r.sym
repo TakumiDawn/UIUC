@@ -1,0 +1,16 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	PRINT0            3000
+//	PRINT1            3001
+//	TARGET            3002
+//	COUNTER           300E
+//	OUTPUT            3014
+//	OUTPUT1           301E
+//	ROW_DONE          3024
+//	ASCII_NL          3027
+//	NEXT_ROW          3029
+//	DONE              302F
+//	FONT_DATA         3030
+

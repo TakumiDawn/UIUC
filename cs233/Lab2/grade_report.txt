@@ -1,0 +1,44 @@
+Grades for version committed on time
+	keypad: 14.55 / 20
+			*Passed test: abcdefg = 48
+			*Passed test: abcdefg = 28
+			*Passed test: abcdefg = 18
+			*Failed test: abcdefg = 44
+				*Your output: valid = 1 number = 7
+			*Failed test: abcdefg = 24
+				*Your output: valid = 1 number = 4
+			*Passed test: abcdefg = 14
+			*Failed test: abcdefg = 42
+				*Your output: valid = 1 number = 5
+			*Passed test: abcdefg = 22
+			*Passed test: abcdefg = 12
+			*Passed test: abcdefg = 21
+			*Passed test: abcdefg = 00
+		
+	extract_message: 40.0 / 40
+			*Passed test: simple
+				*Encoded message: [66, 35, 13, 86, 65, 127, 127, 0] (B#VA).
+				*Expected decode: [118, 107, 108, 100, 104, 98, 121, 0] (vkldhby)
+				*Actual decode: [118, 107, 108, 100, 104, 98, 121, 0] (vkldhby)
+			*Passed test: 3 words
+				*Encoded message: [99, 35, 239, 38, 192, 255, 239, 0, 74, 134, 15, 6, 160, 255, 239, 0, 2, 6, 3, 3, 4, 7, 7, 0] (c#ï&ÀÿïJ ÿï).
+				*Expected decode: [103, 111, 108, 100, 32, 111, 117, 116, 100, 111, 110, 101, 32, 112, 97, 114, 108, 111, 114, 0] (gold outdone parlor)
+				*Actual decode: [103, 111, 108, 100, 32, 111, 117, 116, 100, 111, 110, 101, 32, 112, 97, 114, 108, 111, 114, 0, 0, 0, 0, 0] (gold outdone parlor)
+			*Passed test: 5 words
+				*Encoded message: [163, 71, 166, 134, 80, 254, 243, 0, 155, 176, 53, 56, 132, 255, 191, 0, 165, 67, 176, 4, 122, 255, 255, 0, 84, 136, 166, 192, 32, 255, 254, 0, 73, 17, 53, 92, 96, 127, 125, 0] (£G¦Pþó°58ÿ¿¥C°zÿÿT¦À ÿþI5\`}).
+				*Expected decode: [67, 111, 46, 32, 112, 101, 114, 109, 101, 97, 116, 105, 111, 110, 32, 115, 99, 114, 105, 112, 116, 117, 114, 101, 32, 100, 101, 98, 97, 116, 105, 110, 103, 32, 108, 105, 110, 116, 121, 0] (Co. permeation scripture debating linty)
+				*Actual decode: [67, 111, 46, 32, 112, 101, 114, 109, 101, 97, 116, 105, 111, 110, 32, 115, 99, 114, 105, 112, 116, 117, 114, 101, 32, 100, 101, 98, 97, 116, 105, 110, 103, 32, 108, 105, 110, 116, 121, 0] (Co. permeation scripture debating linty)
+			*Passed test: Thousands of words
+				*Output hidden (too long)
+		
+	count_ones: 40.0 / 40
+			*Passed test: 2
+			*Passed test: 55
+			*Passed test: 42
+			*Passed test: 0xffffffff
+			*Passed test: 0x12345678
+			*Passed test: 0x55555555
+		
+Total: 94.55 / 100
+
+Final Score: 94.55 / 100

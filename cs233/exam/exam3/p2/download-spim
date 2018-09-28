@@ -1,0 +1,9 @@
+#!/bin/bash
+if [[ "$(uname)" == 'Darwin' ]]; then
+    curl -L -o spim-datapath.tar.gz https://uofi.box.com/shared/static/rjhz85pdowb75i17bkn3takw0lvwtxf9.gz
+elif [[ "$(getconf LONG_BIT)" == '64' ]]; then
+    curl -L -o spim-datapath.tar.gz https://uofi.box.com/shared/static/wha6f6nbux4w60fuyrftwa4apouzh2p6.gz
+else
+    curl -L -o spim-datapath.tar.gz https://uofi.box.com/shared/static/oj7dpx74n080ur709z8onvfygu7wr25t.gz
+fi
+tar -xzf spim-datapath.tar.gz

@@ -1,0 +1,35 @@
+MP
+1 //LC3
+-C to LC3 conversion
+-run-time stack!
+-link list!!!
+
+3 // for loop
+4 // functional call
+5 /* pointer
+6 array with 1D expression i*m+j
+7 /*recursion and backtracking
+8 array manipulation
+9 //recursion and backtracking
+
+10 linked list
+-traverse linked list
+-set up conditions for while loop
+-manipulate the tree
+-reverse, remove duplicate, insert, remove, sort
+
+11 tree -> recursion
+-BST, Binary search tree
+-construct tree,
+-traverse three using recursion
+-manipulate the tree
+-change topology, insert, remove
+
+12 C++
+-class
+-constructor
+-copy constructor
+-operator overloading
+-inheritance
+-virtual functions   !
+-pass by reference

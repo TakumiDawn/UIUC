@@ -1,0 +1,13 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	INPUT             3004
+//	RESULT            3005
+//	FIBON             3006
+//	MORE              3011
+//	ONEANDTWO         3019
+//	BAD               301C
+//	GOOD              301F
+//	DONE              3022
+

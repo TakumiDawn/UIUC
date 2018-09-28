@@ -1,0 +1,31 @@
+; This is the file you will use for the lab assignment
+; Make sure to comment your code properly and don't exceed 
+; the line limitation for this assignment.  Good luck!
+
+
+; The program description and code starts here
+
+; Name: Feiyang Li   Date: 04/09/2017 
+; This program will compute the sum of positive numbers among a set of 10 numbers 
+; represented in 2's complement format and will store the result in register R5.
+
+; R1 is used as a temporary register to store value of M[R3]
+; R3 is used as a pointer
+; R4 is used as the counter, initialized as 10
+; R5 stores the result, initialized as 0
+
+0011 0001 0000 0000 ; x3100 - starting address of the program
+
+1110 011 000110001   ; R3 <- x3101+x31 (x3132)  set the value of R3 to the start address of numbers
+0101 101 101 1 00000 ; R5 <- 0                  clear R5
+0101 100 100 1 00000 ; R4 <- 0                  clear R4
+0001 100 100 1 01010 ; R4 <- 10                 set the value of R4 to 10 
+0000 010 000000110   ; BRz x310B                check if R4=0, so done
+0110 001 011 000000  ; R1 <- M[R3]              load the value of R3 to R1 
+0000 110 000000001   ; BRnz x3108               check if R1 is nonpositive, so ignore
+0001 101 101 0 00 001; R5 <- R5+R1              add R1 to R5
+0001 011 011 1 00001 ; R3 <- R3+1               pointer increment (R3)
+0001 100 100 1 11111 ; R4 <- R4-1               counter decrement (R4)
+0000 111 111111001   ; BRnzp x 3104             repeat steps to check all numbers
+1111 0000 00100101   ; Halt                     Done
+

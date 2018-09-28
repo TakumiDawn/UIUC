@@ -1,0 +1,11 @@
+.text
+
+## bool is_connected(unsigned int pos1, unsigned int pos2,
+##                   unsigned int* origins) {
+##     return get_origin(pos1, origins) == get_origin(pos2, origins);
+## }
+
+.globl is_connected
+is_connected:
+	# Your code goes here :)
+	jr	$ra

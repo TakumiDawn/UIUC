@@ -1,0 +1,521 @@
+#include "sparsemat.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+
+ /* load_tuples should open a file with the name 'input_file', read the
+ * data from the file, and return a matrix of the list of tuples type.
+ * If any coordinates repeat in the input file, the newer coordinates
+ * ( a lower line closer to the end of the text document ) should
+ * overwrite the old line. If there is an entry with a value of 0 then
+ * the corresponding node should be deleted if it exists. The elements
+ * in the input text file may be unordered unlike the example text file
+ * above), but the list of tuples returned will need to be in order.
+ */
+
+void overwrite(sp_tuples *matrix,sp_tuples_node *current, sp_tuples_node *check)
+{
+  sp_tuples_node *precheck,*precurrent;
+  precheck=matrix->tuples_head;
+  precurrent=matrix->tuples_head;
+  while(precheck->next!=check)
+  {
+    precheck=precheck->next;
+  }
+  while(precurrent->next!=current)
+  {
+    precurrent=precurrent->next;
+  }
+  precurrent->next=check;
+  precheck->next=check->next;
+  check->next=current->next;
+  matrix->nz--;
+  free(current);
+}
+//Helper function, helps to delete any duplicate entry in the matrix.
+void deleteduplicate(sp_tuples *matrix)
+{
+  //If there is only 0 or 1 entry in the matrix, simply return.
+  if(matrix->tuples_head==NULL)
+  return;
+  sp_tuples_node *current=matrix->tuples_head;
+  sp_tuples_node *prev,*duplicate,*check;
+  if(current->next==NULL)
+  return;
+  //If there is more than 1 entries in the matrix.
+  //First, check if there is any duplicate entries with the first entry in the matrix.
+  prev=matrix->tuples_head;
+  current=matrix->tuples_head->next; //Current points to the second second entry of the matrix.
+  while(current!=NULL)
+  {
+    if(current->row==matrix->tuples_head->row&&current->col==matrix->tuples_head->col)
+    { //Find a duplicate.
+      duplicate=matrix->tuples_head;
+      matrix->tuples_head=current;
+      prev->next=current->next;
+      current->next=duplicate->next;
+      free(duplicate);
+      matrix->nz--;
+      current=matrix->tuples_head;
+    } //Over write the previous entry in the matrix.
+    prev=current;
+    current=current->next;
+  }
+//Second, check if there is any other duplicate entries in the rest of the matrix.
+  current=matrix->tuples_head;
+  while(current->next->next!=NULL) //Loop through the entire matrix to check duplicate entries for every entry.
+  {
+    check=current->next->next;
+    while(check!=NULL)
+    {
+      if(check->row==current->next->row&&check->col==current->next->col)
+      {
+      overwrite(matrix,current->next,check);
+      check=current->next->next;
+      }
+      else
+      {
+      check=check->next;
+      }
+    }
+   current=current->next;
+   }
+}
+
+//Helper function, helps to delete the zeros in the matrix.
+void deletezero(sp_tuples *matrix)
+{
+  //If the first entrty is zero.
+  while(matrix->tuples_head->value==0)
+  {
+    overwrite(matrix,matrix->tuples_head,matrix->tuples_head->next);
+  }
+  sp_tuples_node *current,*prev;
+  prev=matrix->tuples_head;
+  current=prev->next;
+  while(current!=NULL)
+  {
+    if(current->value==0)
+    {
+      prev->next=current->next; //Deleteing zero entry.
+      free(current);
+      matrix->nz--;
+      current=prev->next;
+    }
+    else
+    {
+      prev=current;
+      current=current->next;
+    }
+  }
+}
+
+//Helper function, helps to find the entry with smallest row and col.
+sp_tuples_node *findsmall(sp_tuples *matrix, sp_tuples_node *current)
+{
+  int tmp=matrix->n*current->row+current->col;
+  sp_tuples_node *check=current->next;
+  sp_tuples_node *small=current;
+  while(check!=NULL) //Find the smallest row.
+  {
+    if(tmp>=(check->row*matrix->n+check->col))
+    {
+      tmp=check->row*matrix->n+check->col;
+      small=check;
+    }
+    check=check->next;
+  }
+  return small;
+}
+
+//Helper function, helps to sort the matrix according to row and col.
+void sortmatrix(sp_tuples *matrix)
+{
+//If there is only 0 or 1 entry in the matrix, return.
+  if(matrix->tuples_head==NULL)
+  return;
+  sp_tuples_node *current=matrix->tuples_head;
+  if(current->next==NULL)
+  return;
+//There are two or more entries in the matrix.
+//Find the smallest entry for the head node.
+  current=findsmall(matrix,matrix->tuples_head);
+  int tmpcol,tmprow;
+  double tmpval;
+  if(current!=matrix->tuples_head) //We need to chagne the first entry.
+  {
+    tmpcol=current->col;
+    tmprow=current->row;
+    tmpval=current->value;
+    current->row=matrix->tuples_head->row;
+    current->col=matrix->tuples_head->col;
+    current->value=matrix->tuples_head->value;
+    matrix->tuples_head->col=tmpcol;
+    matrix->tuples_head->row=tmprow;
+    matrix->tuples_head->value=tmpval;
+  }
+  sp_tuples_node *B,*prev;
+//Loop through the matrix and swap entries when necessary.
+  prev=matrix->tuples_head;
+  current=matrix->tuples_head->next;
+  while(current->next!=NULL)
+  {
+    B=findsmall(matrix,current);
+    if(B!=current)
+    {
+      tmpcol=B->col;
+      tmprow=B->row;
+      tmpval=B->value;
+      B->row=current->row;
+      B->col=current->col;
+      B->value=current->value;
+      current->col=tmpcol;
+      current->row=tmprow;
+      current->value=tmpval;
+      current=prev->next;
+    }
+    else
+    {
+      prev=current;
+      current=current->next;
+    }
+  }
+}
+
+sp_tuples * load_tuples(char* input_file)
+{
+  FILE *input;
+  input=fopen(input_file,"r"); //Open the input file for read.
+  if(input==NULL)
+  {
+    printf("Unable to open file.\n");
+    return NULL;
+  }
+
+  sp_tuples *matrix=malloc(sizeof(sp_tuples)); //Define matrix as type sp_tuples.
+  fscanf(input,"%d %d",&matrix->m,&matrix->n); //Initialize the size of the matrix.
+  matrix->nz=0; //Initialize the number of non-zero entries.
+  matrix->tuples_head=NULL;
+
+  sp_tuples_node *current=malloc(sizeof(sp_tuples_node));
+  current->next=NULL;
+  sp_tuples_node *prev;
+  matrix->tuples_head=current;
+
+  while(fscanf(input,"%d %d %lf",&current->row,&current->col,&current->value)==3)
+  {
+    current->next=malloc(sizeof(sp_tuples_node));
+    prev=current;
+    current=current->next;
+    current->next=NULL;
+    matrix->nz++; //Increase the count.
+  } //Loop through the input file and read each non-zero entries.
+  prev->next=NULL;
+  free(current);
+  fclose(input); //Close the input file.
+  deleteduplicate(matrix); //Delete any duplicate entries in the matrix.
+  deletezero(matrix); //Delete any 0 entrty in the matrix.
+  sortmatrix(matrix); //Sort the matrix and delete any duplicate entries.
+  return matrix;
+}
+
+
+/*
+ * gv_tuples return the value of the element at the given row and
+ * column within the matrix.
+ */
+ double gv_tuples(sp_tuples * mat_t,int row,int col)
+ {
+     //If the matrix is empty, return 0
+     if (mat_t->nz == 0) return 0;
+     //otherwise, iterate through the loop to find the value
+     sp_tuples_node *node1 = mat_t->tuples_head;  //current node
+     while(node1-> next!= NULL)
+     {
+     if (node1->row == row && node1->col == col) return node1->value;
+     //deal with the case at the end of matrix
+     if (node1->next->next == NULL) {
+       if (node1->next->row == row && node1->next->col == col) return node1->next->value;
+     }
+     node1 = node1->next;
+     }
+     //nothing found return 0
+     return 0;
+ }
+
+
+/* set_tuples sets the element at row and col to value. This
+ * function will need to do several things: if value is 0, it will
+ * need to find the node at row and col if it exists, and delete it
+ * from the list. Be sure to free the nodes from memory or they will
+ * be lost forever. For any other value, the function will need to find
+ * the correct location for the node within the sorted linked list. If
+ * the entry already exists, the function should replace the old value.
+ * If the entry doesn't exist, a node should be created and inserted
+ * into the linked list. hint: It may be useful to write your own
+ * helper functions to organize your code for these functions.
+ */
+ void set_tuples(sp_tuples * mat_t, int row, int col, double value)
+{
+  sp_tuples_node *current=mat_t->tuples_head;
+  //If value is not o.
+  if(value!=0)
+  {
+  current=mat_t->tuples_head;
+  //If the matrix is empty.
+  if(current==NULL)
+  {
+    mat_t->tuples_head=malloc(sizeof(sp_tuples_node));
+    mat_t->tuples_head->col=col;
+    mat_t->tuples_head->row=row;
+    mat_t->tuples_head->value=value;
+    mat_t->tuples_head->next=NULL;
+    mat_t->nz++;
+  }
+  //If the matrix is not empty.
+  else
+  {
+    while(!(current->row==row&&current->col==col))
+    {
+      current=current->next;
+      if(current==NULL)
+      break;
+    }
+    //There is no entry (row,col) in the matrix.
+    if(current==NULL)
+    {
+      int tmp=row*mat_t->n+col;
+      current=mat_t->tuples_head;
+     //Find the right place to insert the new entry.
+      while(tmp>current->row*mat_t->n+current->col)
+      {
+        current=current->next;
+        if(current==NULL)
+        break;
+      }
+      if(current==mat_t->tuples_head)
+      {
+       sp_tuples_node *node=malloc(sizeof(sp_tuples_node));
+       node->next=current;
+       mat_t->tuples_head=node;
+       node->col=col;
+       node->row=row;
+       node->value=value;
+       mat_t->nz++;
+      }
+      else
+      {
+       sp_tuples_node *precurrent=mat_t->tuples_head;
+       while(precurrent->next!=current)
+       precurrent=precurrent->next;
+       sp_tuples_node *node2=malloc(sizeof(sp_tuples_node));
+       node2->next=current;
+       precurrent->next=node2;
+       node2->col=col;
+       node2->row=row;
+       node2->value=value;
+       mat_t->nz++;
+      }
+    }
+//There is non-zero entry (row,col) in the matrix.
+    else
+    {
+      current->value=value;
+    }
+   }
+ }
+//If value is 0.
+   else
+   {
+   //If the matrix is empty, simply return.
+     current=mat_t->tuples_head;
+     if(current==NULL)
+     {
+       return;
+     }
+     if(current->row==row&&current->col==col)
+     {
+       mat_t->tuples_head=current->next;
+       free(current);
+       mat_t->nz--;
+     }
+     else
+     {
+     while(current!=NULL)
+     {
+       if(current->row==row&&current->col==col)
+       {
+         break;
+       }
+       current=current->next;
+       if(current==NULL)
+       return;
+    }
+    //Delete the current node.
+    sp_tuples_node *precurrent=mat_t->tuples_head;
+
+   while(precurrent->next!=current)
+   {
+     precurrent=precurrent->next;
+   }
+   precurrent->next=current->next;
+   free(current);
+   mat_t->nz--;
+   }
+  }
+  return;
+}
+
+
+/* save_tuples writes the data in a sparse matrix structure to a
+ * text file in the format specified above. Because of the way the
+ * linked lists are ordered, writing the entries of the matrix as you
+ * traverse the list will give an output in row major order. Your
+ * text file output must be in this order even though load_tuples
+ * should able to handle reading un-ordered text files.
+ */
+ void save_tuples(char * file_name, sp_tuples * mat_t)
+ {
+   FILE *fp2 = fopen(file_name, "w");
+   //Save the row and col size
+   fprintf(fp2, "%d %d\n", mat_t->m, mat_t->n);
+   //iterate through the loop to put all values on it
+   int flag = mat_t->nz;
+   sp_tuples_node *node1 = mat_t->tuples_head;  //current node
+   while(flag > 0)
+   {
+     fprintf(fp2, "%d %d %lf\n", node1->row, node1->col, node1->value);
+     node1 = node1->next;
+     flag--;
+   }
+   fclose(fp2);
+ 	return;
+ }
+
+/*
+ * Typically, to calculate the matrix C = A + B, you would loop
+ * through every element of matrix A and B and add them together.
+ * With large sparse matrices, this results in a lot of memory
+ * accesses and operations just to calculate 0+0. Instead, its more
+ *  efficient to only do operations on the non-zero elements of A and
+ * B, which can be found by traversing the linked lists of both matrices.
+ */
+sp_tuples * add_tuples(sp_tuples * matA, sp_tuples * matB)
+{
+ sp_tuples *matC;
+ if(!(matA->n==matB->n&&matA->m==matB->m))
+ {
+ //Unable to add, return NULL.
+ return NULL;
+ }
+ //Initialize matC.
+ matC=malloc(sizeof(sp_tuples));
+ matC->tuples_head=NULL;
+ matC->n=matA->n;
+ matC->m=matA->m;
+ matC->nz=0;
+
+ sp_tuples_node *nodeA=matA->tuples_head;
+ while(nodeA!=NULL)
+ {
+   set_tuples(matC,nodeA->row,nodeA->col,nodeA->value);
+   nodeA=nodeA->next;
+ }
+ sp_tuples_node *nodeB=matB->tuples_head;
+ while(nodeB!=NULL)
+ {
+   set_tuples(matC,nodeB->row,nodeB->col,gv_tuples(matC,nodeB->row,nodeB->col)+nodeB->value);
+   nodeB=nodeB->next;
+ }
+ return matC;
+}
+
+
+/*
+ * As with addition, we don't want to spend time and processing power
+ *  by calculating operations with 0. The algorithm for matrix
+ * multiplication is similar to addition but slightly more complex.
+ * This algorithm works by traversing matrix A. For each node in A, a
+ * nonzero element needs to be multiplied by every entry in B where the
+ * row of B matches the column of A. The results of each of these
+ * multiplication operations is accumulated into the associated entry in C.
+ * Because the structures are all sorted in row major order, you can take
+ * advantage of the fact that nodes of the same row will be next to
+ * each other when searching matrix B for rows that match. Also
+ * note that unlike addition, matrix multiplication is not
+ * commutative A*B != B*A. Return NULL if multiplication isn't possible.
+ */
+sp_tuples * mult_tuples(sp_tuples * matA, sp_tuples * matB)
+{
+  //If unable to mult, return NULL>
+  if(matA->n!=matB->m)
+  {
+    return NULL;
+  }
+  //Initialize matC.
+  sp_tuples *matC=malloc(sizeof(sp_tuples));
+  matC->tuples_head=NULL;
+  matC->m=matA->m;
+  matC->n=matB->n;
+  matC->nz=0;
+
+  int iA,jA;
+  sp_tuples_node *nodeA=matA->tuples_head;
+  sp_tuples_node *nodeB;
+  if(nodeA==NULL)
+  return NULL;
+
+  while(nodeA!=NULL)
+  {
+    iA=nodeA->row;
+    jA=nodeA->col;
+    nodeB=matB->tuples_head;
+    if(nodeB==NULL)
+    return NULL;
+
+    while(nodeB!=NULL)
+    {
+      if(nodeB->row==jA)
+      {
+        set_tuples(matC,iA,nodeB->col,gv_tuples(matC,iA,nodeB->col)+gv_tuples(matA,iA,jA)*gv_tuples(matB,nodeB->row,nodeB->col));
+      }
+      nodeB=nodeB->next;
+    }
+    nodeA=nodeA->next;
+  }
+  return matC;
+}
+
+/*
+ *destroy_tuples should free all memory associated with the given matrix.
+ */
+void destroy_tuples(sp_tuples * mat_t)
+{
+  if(mat_t==NULL)
+  return;
+  sp_tuples_node *current,*prev;
+  //If there is only one non-zero entry in the matrix.
+  if(mat_t->tuples_head->next==NULL)
+  {
+    free(mat_t->tuples_head);
+    free(mat_t);
+    return;
+  }
+  //Free all the entries in the matrix.
+  while(mat_t->tuples_head->next!=NULL)
+  {
+    current=mat_t->tuples_head->next;
+    prev=mat_t->tuples_head;
+    while(current->next!=NULL)
+    {
+      prev=current;
+      current=current->next;
+    }
+    prev->next=NULL;
+    free(current);
+  }
+  free(mat_t->tuples_head);
+  //Free the mat_t structure in the end.
+  free(mat_t);
+  return;
+}

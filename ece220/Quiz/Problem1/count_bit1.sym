@@ -1,0 +1,10 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	INIT_REGS         3000
+//	TODO              3008
+//	DONE              300E
+//	INPUT_ADDRESS     3010
+//	OUTPUT_VALUE      3011
+

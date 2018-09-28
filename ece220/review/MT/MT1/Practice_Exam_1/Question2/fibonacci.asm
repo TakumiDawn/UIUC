@@ -1,0 +1,22 @@
+.ORIG x3000
+
+LD R1, INPUT    
+JSR FIBON
+ST R6, RESULT
+HALT
+
+;your code goes here
+FIBON
+
+
+
+
+
+
+
+
+
+
+INPUT 	.FILL x0005
+RESULT	.BLKW #1
+.END

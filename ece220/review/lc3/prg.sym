@@ -1,0 +1,11 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	MAIN              3000
+//	HEAD              3006
+//	RSTACK            3007
+//	PRINT_LIST        3008
+//	DONE              3019
+//	TEARDOWN          301B
+

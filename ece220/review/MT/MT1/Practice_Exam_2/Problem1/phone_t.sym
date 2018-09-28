@@ -1,0 +1,22 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	GO                3001
+//	CHECK             300B
+//	INVALID           3011
+//	VALID             3014
+//	DONE              3017
+//	KBSR              3018
+//	KBDR              3019
+//	DSR               301A
+//	DDR               301B
+//	INV_MSG           301C
+//	VAL_MSG           3032
+//	ENTER             3046
+//	NUM0              3047
+//	NUM9              3048
+//	EQ                3049
+//	SADD              304A
+//	SADD_MAX          304B
+

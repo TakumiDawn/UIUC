@@ -1,0 +1,121 @@
+// full_machine: execute a series of MIPS instructions from an instruction cache
+//
+// except (output) - set to 1 when an unrecognized instruction is to be executed.
+// clock   (input) - the clock signal
+// reset   (input) - set to 1 to set all registers to zero, set to 0 for normal execution.
+
+module full_machine(except, clock, reset);
+    output      except;
+    input       clock, reset;
+
+    wire [31:0] inst;
+    wire [31:0] PC;
+    wire [31:0] out;
+    wire [31:0] nextPC;
+    wire [31:0] B;
+    wire [31:0] rsData;
+    wire [31:0] rtData;
+    wire [4:0] rdNum;
+    wire [31:0] rdData;
+    wire rdWriteEnable;
+    wire rd_src;
+    wire alu_src2;
+    wire [2:0] alu_op;
+
+    wire zero;
+    wire negative;
+    wire [1:0] control_type;
+    wire mem_read;
+    wire word_we;
+    wire byte_we;
+    wire byte_load;
+    wire slt;
+    wire lui;
+    wire addm;
+    wire [31:0] control0;
+    wire [31:0] control1;
+    wire [31:0] control2;
+    wire [31:0] control3;
+    wire [31:0] b_offset;
+    wire [31:0] mainalu_out;
+    wire [31:0] addr;
+    wire [31:0] data_out;
+    wire [31:0] data_in;
+    wire [7:0] m_dout_out;
+    wire [31:0] m_bl_in;
+    wire [31:0] m_bl_out;
+    wire [31:0] m_mr_in;
+    wire [31:0] m_mr_out;
+    wire [31:0] m_slt_in;
+    wire [31:0] m_slt_out;
+    wire [31:0] m_lui_in;
+    wire [31:0] mainalu_in;
+    wire overflow;
+
+    // DO NOT comment out or rename this module
+    // or the test bench will break
+    register #(32) PC_reg(PC, nextPC, clock, 1'b1, reset);
+
+    // DO NOT comment out or rename this module
+    // or the test bench will break
+    instruction_memory im(inst[31:0], PC[31:2]);
+
+    // DO NOT comment out or rename this module
+    // or the test bench will break
+    regfile rf(rsData, rtData,
+                    inst[25:21], inst[20:16], rdNum, rdData,
+                    rdWriteEnable, clock, reset);
+
+    /* add other modules */
+    alu32 pcplus4(control0,,,, PC, 32'h4, `ALU_ADD);
+    mips_decode decoder1(alu_op, rd_src, alu_src2, rdWriteEnable, except, control_type,
+                       mem_read, word_we, byte_we, byte_load, slt, lui, addm,
+                       inst[31:26], inst[5:0], zero);
+
+    mux2v #(5) m1(rdNum, inst[15:11], inst[20:16], rd_src);
+    mux2v m2(B[31:0],rtData,out,alu_src2);
+    alu32 mainalu(mainalu_out,zero,negative,overflow, mainalu_in, B[31:0], alu_op);
+
+    //sign extender
+    assign out[15:0] = inst[15:0];
+    assign out[31:16] = {16{inst[15]}};
+
+    alu32 alu_offset(control1,,,, control0, b_offset, `ALU_ADD);
+    mux4v m_ctrl(nextPC, control0, control1, control2, control3, control_type);
+    //shift left 2
+    assign b_offset[31:2] = out[29:0];
+    assign b_offset[1:0] = 2'b00;
+    //control2 & 3
+    assign control2[31:28] = PC[31:28];
+    assign control2[27:2] = inst[25:0];
+    assign control2[1:0] = 2'b00;
+    assign control3[31:0] = rsData[31:0];
+
+    data_mem Data_Memory(data_out, addr, data_in, word_we, byte_we, clock, reset);
+
+    assign data_in[31:0] = rtData[31:0];
+
+    mux4v #(8) m_dout(m_dout_out, data_out[7:0], data_out[15:8], data_out[23:16], data_out[31:24], addr[1:0]);
+
+    assign m_bl_in[7:0] = m_dout_out;
+    assign m_bl_in[31:8] = 24'b0;
+
+    mux2v m_bl(m_bl_out, data_out, m_bl_in, byte_load);
+
+    mux2v m_slt(m_slt_out, mainalu_out, m_slt_in, slt);
+    assign m_slt_in[0] = negative ^ overflow;
+    assign m_slt_in[31:1] = 31'b0;
+
+    mux2v m_mr(m_mr_out, m_slt_out, m_mr_in, mem_read);
+    assign m_mr_in = m_bl_out;
+
+    mux2v m_lui(rdData, m_mr_out, m_lui_in, lui);
+    assign m_lui_in[31:16] = inst[15:0];
+    assign m_lui_in[15:0] = 16'b0;
+
+    mux2v addm1(mainalu_in, rsData, data_out, addm);
+    mux2v addm2(addr, mainalu_out, rsData, addm);
+
+
+
+endmodule // full_machine

@@ -1,0 +1,78 @@
+./machine_exe
+VCD info: dumpfile m.vcd opened for output.
+At time                    0, reset = 1 pc = xxxxxxxX, inst = xxxxxxxx
+At time                    5, reset = 1 pc = 00400000, inst = 8f820000
+At time                    7, reset = 0 pc = 00400000, inst = 8f820000
+At time                   15, reset = 0 pc = 00400004, inst = 8f830004
+At time                   25, reset = 0 pc = 00400008, inst = 00432020
+At time                   35, reset = 0 pc = 0040000c, inst = 00442822
+At time                   45, reset = 0 pc = 00400010, inst = 00653024
+At time                   55, reset = 0 pc = 00400014, inst = 00433825
+At time                   65, reset = 0 pc = 00400018, inst = 0045402a
+At time                   75, reset = 0 pc = 0040001c, inst = 00c3482a
+At time                   85, reset = 0 pc = 00400020, inst = 11090003
+At time                   95, reset = 0 pc = 00400024, inst = af830000
+At time                  105, reset = 0 pc = 00400028, inst = 114b0001
+At time                  115, reset = 0 pc = 00400030, inst = 8f8a0000
+At time                  125, reset = 0 pc = 00400034, inst = 8f8b0004
+At time                  135, reset = 0 pc = 00400038, inst = 00000000
+At time                  145, reset = 0 pc = 0040003c, inst = 00000000
+At time                  155, reset = 0 pc = 00400040, inst = 00000000
+At time                  165, reset = 0 pc = 00400044, inst = 00000000
+At time                  175, reset = 0 pc = 00400048, inst = 00000000
+At time                  185, reset = 0 pc = 0040004c, inst = 00000000
+At time                  195, reset = 0 pc = 00400050, inst = 00000000
+At time                  205, reset = 0 pc = 00400054, inst = 00000000
+At time                  215, reset = 0 pc = 00400058, inst = 00000000
+At time                  225, reset = 0 pc = 0040005c, inst = 00000000
+At time                  235, reset = 0 pc = 00400060, inst = 00000000
+At time                  245, reset = 0 pc = 00400064, inst = 00000000
+At time                  255, reset = 0 pc = 00400068, inst = 00000000
+At time                  265, reset = 0 pc = 0040006c, inst = 00000000
+At time                  275, reset = 0 pc = 00400070, inst = 00000000
+At time                  285, reset = 0 pc = 00400074, inst = 00000000
+At time                  295, reset = 0 pc = 00400078, inst = 00000000
+At time                  305, reset = 0 pc = 0040007c, inst = 00000000
+Dumping register state: 
+  Register :  hex-value (  dec-value )
+          0: 0x00000000 (           0 )
+          1: 0x10010000 (   268500992 )
+          2: 0x00000016 (          22 )
+          3: 0x0000002a (          42 )
+          4: 0x00000040 (          64 )
+          5: 0xffffffd6 (         -42 )
+          6: 0x00000002 (           2 )
+          7: 0x0000003e (          62 )
+          8: 0x00000000 (           0 )
+          9: 0x00000001 (           1 )
+         10: 0x0000002a (          42 )
+         11: 0x0000002a (          42 )
+         12: 0x10010000 (   268500992 )
+         13: 0x10010000 (   268500992 )
+         14: 0x10010000 (   268500992 )
+         15: 0x10010000 (   268500992 )
+         16: 0x10010000 (   268500992 )
+         17: 0x10010000 (   268500992 )
+         18: 0x10010000 (   268500992 )
+         19: 0x10010000 (   268500992 )
+         20: 0x10010000 (   268500992 )
+         21: 0x10010000 (   268500992 )
+         22: 0x10010000 (   268500992 )
+         23: 0x10010000 (   268500992 )
+         24: 0x10010000 (   268500992 )
+         25: 0x10010000 (   268500992 )
+         26: 0x10010000 (   268500992 )
+         27: 0x10010000 (   268500992 )
+         28: 0x10010000 (   268500992 )
+         29: 0x10010000 (   268500992 )
+         30: 0x10010000 (   268500992 )
+         31: 0x10010000 (   268500992 )
+
+Dumping memory state: 
+   Address :  hex-value (  dec-value )
+ 0x10010000: 0x0000002a (          42 )
+ 0x10010004: 0x0000002a (          42 )
+ 0x10010008: 0x00000000 (           0 )
+ 0x1001000c: 0x00000000 (           0 )
+ 0x10010010: 0xdeadbeef (  -559038737 )
+Done.  Simulation ending.

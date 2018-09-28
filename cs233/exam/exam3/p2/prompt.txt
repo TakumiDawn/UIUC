@@ -1,0 +1,9 @@
+swplus  rt, imm16(rs)
+Store word with address post-increment
+i-type
+opcode: 6'h3b
+
+`define OP_SWPLUS   6'h3b  # You will want to copy this line into machine.v.
+
+M[R[rs] + SignExtend(imm16)] = R[rt]
+R[rs] = R[rs] + 4

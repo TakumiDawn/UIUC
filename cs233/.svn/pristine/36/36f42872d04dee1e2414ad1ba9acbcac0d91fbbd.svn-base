@@ -1,0 +1,24 @@
+.text
+
+## void add_line(unsigned int start_pos, unsigned int end_pos,
+##               unsigned int* canvas, unsigned int* origins) {
+##     int step_size = 1;
+##     // Check if the line is vertical.
+##     if (!((start_pos ^ end_pos) & 31)) {
+##         step_size = 32;
+##     }
+##     if (start_pos > end_pos) {
+##         step_size *= -1;
+##     }
+##     // Update the origin map.
+##     add_dot(end_pos, canvas);
+##     for (int i = start_pos; i != end_pos; i += step_size) {
+##         add_dot(i, canvas);
+##         origins[get_origin(i + step_size, origins)] = get_origin(i, origins);
+##     }
+## }
+
+.globl add_line
+add_line:
+	# Your code goes here :)
+	jr	$ra

@@ -1,0 +1,21 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	REVERSE           3002
+//	CONT              300B
+//	R_DONE            3010
+//	R_SAVER0          3015
+//	R_SAVER1          3016
+//	R_SAVER2          3017
+//	R_SAVER7          3018
+//	NUM_ADDR          3019
+//	CHAR_ADDR         301A
+//	SWAPMEM           301B
+//	S_DONE            3024
+//	S_SAVER0          302A
+//	S_SAVER1          302B
+//	S_SAVER2          302C
+//	S_SAVER3          302D
+//	S_SAVER7          302E
+

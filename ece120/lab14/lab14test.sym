@@ -1,0 +1,18 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	NEXT_ROW          3001
+//	NEXT_CHA          3006
+//	FIND              300C
+//	NEXT_COLUMN       3014
+//	YES               301F
+//	DONE_ROW          3023
+//	DONE              3027
+//	ZER               3028
+//	ONE               3029
+//	CHA               302A
+//	NLI               302B
+//	FIR               302C
+//	FONT_DATA         3034
+
